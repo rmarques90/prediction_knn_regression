@@ -2,6 +2,8 @@ import flask
 from flask import jsonify
 
 from test_predict import predict
+from test_predict_logistic import predictLR, predictWithSavedModel
+from test_predict_tree import predictRF
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -14,7 +16,7 @@ def home():
 
 @app.route('/predict', methods=['GET'])
 def predictRequest():
-    predictPossibility = predict()
+    predictPossibility = predictWithSavedModel()
     response = {
         "success": True,
         "predict": str(predictPossibility * 100) + '%'

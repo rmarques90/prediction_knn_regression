@@ -8,15 +8,16 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import confusion_matrix as cfm, precision_score as ps, recall_score as rs, f1_score as f1s, \
     classification_report as cr
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import LabelEncoder
 
 from Utils import getData
 
 columnResultName = "Resultado"
-knn = KNeighborsRegressor()
+knn = KNeighborsClassifier()
 
 def checkKnnNumbers(x_train, y_train, x_test, shouldPlot):
+    return 3
     maxRange = 20
     if len(x_test) < 20:
         maxRange = len(x_test)
@@ -54,7 +55,7 @@ def predictResult(betterN, x_train, y_train, y_test, x_test):
         knn.n_neighbors = betterN
         knn.fit(x_train, y_train)
 
-        dump(knn, 'models/knn_teste.joblib')
+        # dump(knn, 'models/knn_teste.joblib')
 
         prFit = knn.predict(x_test)
         print("predicao: a", prFit)
@@ -77,7 +78,7 @@ def predictResult(betterN, x_train, y_train, y_test, x_test):
 
 def predict():
     # buscar arquivo para treinar o modelo
-    data = getData("/tmp/predictresample.csv", "Resultado", False)
+    data = getData("/tmp/predict.csv", "Resultado", False)
 
     # criando os targets
     y = np.array(data[columnResultName])
