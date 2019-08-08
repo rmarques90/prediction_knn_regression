@@ -1,8 +1,9 @@
 import flask
-from flask import jsonify
+from flask import jsonify, request
 
 from test_predict import predict
-from test_predict_logistic import predictLR, predictWithSavedModel
+from predict_binary_logistic import predictLR, predictWithSavedModel
+from predict_nonbinary_logistic import predictNonBinaryLR
 from test_predict_tree import predictRF
 
 app = flask.Flask(__name__)
@@ -16,7 +17,17 @@ def home():
 
 @app.route('/predict', methods=['GET'])
 def predictRequest():
-    predictPossibility = predictWithSavedModel()
+    #predictPossibility = predictWithSavedModel()
+    predictPossibility = predictLR()
+    response = {
+        "success": True,
+        "predict": str(predictPossibility * 100) + '%'
+    }
+    return jsonify(response)
+
+@app.route('/predict-2', methods=['GET'])
+def predictNonBinaryRequest():
+    predictPossibility = predictNonBinaryLR()
     response = {
         "success": True,
         "predict": str(predictPossibility * 100) + '%'

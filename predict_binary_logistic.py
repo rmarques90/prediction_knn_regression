@@ -19,10 +19,15 @@ from Utils import getData, getBestModelParamsForLR
 columnResultName = "Resultado"
 #logisticR = LogisticRegression(tol=1e-4, C=10000, max_iter=1000)
 #logisticR = LogisticRegression(tol=1e-8, C=8000, max_iter=1000)
-logisticR = LogisticRegression(C=10000, class_weight=None, dual=False, fit_intercept=True,
+# logisticR = LogisticRegression(C=10000, class_weight=None, dual=False, fit_intercept=True,
+#                    intercept_scaling=1, l1_ratio=None, max_iter=100,
+#                    multi_class='warn', n_jobs=None, penalty='l2',
+#                    random_state=None, solver='warn', tol=0.0001, verbose=0,
+#                    warm_start=False)
+logisticR = LogisticRegression(C=100000, class_weight=None, dual=False, fit_intercept=True,
                    intercept_scaling=1, l1_ratio=None, max_iter=100,
                    multi_class='warn', n_jobs=None, penalty='l2',
-                   random_state=None, solver='warn', tol=0.0001, verbose=0,
+                   random_state=None, solver='warn', tol=0.000001, verbose=0,
                    warm_start=False)
 
 
@@ -41,7 +46,6 @@ def predictResult(x_train, y_train, y_test, x_test):
     dump(logisticR, 'logistic.model')
 
     logisticLoaded = load('logistic.model')
-
 
     prFit = logisticLoaded.predict(x_test)
     print("predicao:", prFit)
@@ -125,7 +129,11 @@ def predictWithSavedModel():
 
     modelLoaded = load('logistic.model')
 
-    predict = modelLoaded.predict(fts2)
-    print("Previsão: ")
+    predict = modelLoaded.predict_proba(fts2)
+    print("Previsão(porcentagem): ")
     print(predict)
+
+    print("Previsão absoluta: ")
+    print(modelLoaded.predict(fts2))
+
     return predict[0]
